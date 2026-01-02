@@ -1,0 +1,177 @@
+/* Inicio Page */
+.inicio-page {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.seccion-intro {
+  padding: 4rem 2rem;
+  text-align: center;
+  background-color: var(--bg-card);
+}
+
+.seccion-intro h2 {
+  font-size: 3.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.seccion-intro p {
+  font-size: 1.8rem;
+  color: var(--text-muted);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  gap: 2rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--border-color);
+  border-top: 5px solid var(--accent-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  font-size: 1.6rem;
+  color: var(--text-muted);
+}
+
+.error-message {
+  background-color: #fee;
+  color: #c33;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 800px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #fcc;
+}
+
+/* Botón flotante del carrito */
+.boton-ver-carrito-flotante {
+  position: fixed;
+  bottom: 3rem;
+  right: 2rem;
+  z-index: 999;
+  background-color: #e08709;
+  color: white;
+  font-weight: bold;
+  font-size: 1.6rem;
+  padding: 1.5rem 2rem;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  animation: slideInRight 0.5s ease-out;
+}
+
+.boton-ver-carrito-flotante:hover {
+  background-color: #c77808;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.boton-ver-carrito-flotante:active {
+  transform: translateY(-1px);
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Botón flotante scroll to top */
+.boton-scroll-top {
+  width: 4.5rem;
+  height: 4.5rem;
+  position: fixed;
+  bottom: 18rem;
+  right: 1.2rem;
+  background-color: #71b100;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out, background-color 0.3s ease;
+  transform: translateY(20px);
+}
+
+.boton-scroll-top.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.boton-scroll-top img {
+  width: 2.4rem;
+  filter: invert(20%);
+}
+
+.boton-scroll-top:hover {
+  background-color: #5a8d00;
+  transform: translateY(0) scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .seccion-intro h2 {
+    font-size: 2.8rem;
+  }
+  
+  .seccion-intro p {
+    font-size: 1.4rem;
+  }
+
+  .boton-ver-carrito-flotante {
+    bottom: 2rem;
+    right: 1rem;
+    padding: 1.2rem 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  .boton-ver-carrito-flotante span {
+    display: none;
+  }
+
+  .boton-scroll-top {
+    bottom: 15rem;
+    right: 1rem;
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .boton-scroll-top img {
+    width: 2rem;
+  }
+}

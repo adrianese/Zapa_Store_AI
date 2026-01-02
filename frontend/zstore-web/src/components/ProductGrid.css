@@ -1,0 +1,65 @@
+/* Paginación */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 2rem 0 1rem 0;
+}
+.paginacion button {
+  background: #fff;
+  border: 1px solid #e08709;
+  color: #e08709;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.2s, color 0.2s;
+}
+.paginacion button.pagina-activa,
+.paginacion button:hover:not(:disabled) {
+  background: #e08709;
+  color: #fff;
+}
+.paginacion button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* Product Grid - Estilo original */
+.product-grid-container {
+  max-width: 1400px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  justify-items: stretch;
+}
+
+.no-productos {
+  text-align: center;
+  padding: 6rem 2rem;
+  font-size: 1.8rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .product-grid-container {
+    margin: 2rem auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
