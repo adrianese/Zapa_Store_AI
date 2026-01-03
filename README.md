@@ -59,27 +59,24 @@ La plataforma permite:
 
 ```
 Zstore-ai/
-├── backend/
-│   └── zstore-api/          # API REST Laravel
-│       ├── app/
-│       │   ├── Http/Controllers/Api/   # Controladores
-│       │   ├── Models/                 # Modelos Eloquent
-│       │   ├── Services/               # Logica de negocio
-│       │   └── Notifications/          # Notificaciones
-│       ├── database/migrations/        # Migraciones
-│       ├── routes/api.php              # Rutas API
-│       └── config/                     # Configuracion
-├── frontend/
-│   └── zstore-web/          # Aplicacion React
-│       └── src/
-│           ├── components/  # Componentes reutilizables
-│           ├── pages/       # Paginas de la aplicacion
-│           ├── context/     # Contextos React
-│           ├── routes/      # Configuracion de rutas
-│           └── layouts/     # Layouts de pagina
+├── backend/                 # API REST Laravel
+│   ├── app/
+│   │   ├── Http/Controllers/Api/   # Controladores
+│   │   ├── Models/                 # Modelos Eloquent
+│   │   ├── Services/               # Logica de negocio
+│   │   └── Notifications/          # Notificaciones
+│   ├── database/migrations/        # Migraciones
+│   ├── routes/api.php              # Rutas API
+│   └── config/                     # Configuracion
+├── frontend/                # Aplicacion React
+│   └── src/
+│       ├── components/      # Componentes reutilizables
+│       ├── pages/           # Paginas de la aplicacion
+│       ├── context/         # Contextos React
+│       ├── routes/          # Configuracion de rutas
+│       └── layouts/         # Layouts de pagina
 ├── contracts/               # Smart Contracts Solidity
 │   └── Marketplace.sol      # Contrato principal
-
 ```
 
 ---
@@ -182,7 +179,7 @@ cd Zstore-ai
 
 ### 2. Configurar Backend (Laravel)
 ```bash
-cd backend/zstore-api
+cd backend
 
 # Instalar dependencias PHP
 composer install
@@ -207,7 +204,7 @@ php artisan db:seed
 
 ### 3. Configurar Frontend (React)
 ```bash
-cd frontend/zstore-web
+cd frontend
 
 # Instalar dependencias
 npm install
@@ -220,14 +217,14 @@ echo "VITE_API_URL=http://localhost:8000/api" > .env
 
 #### Terminal 1 - Backend:
 ```bash
-cd backend/zstore-api
+cd backend
 php artisan serve
 # Servidor en http://localhost:8000
 ```
 
 #### Terminal 2 - Frontend:
 ```bash
-cd frontend/zstore-web
+cd frontend
 npm run dev
 # Servidor en http://localhost:5173
 ```

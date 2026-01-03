@@ -7,12 +7,11 @@ use App\Models\Order;
 use App\Models\Shipment;
 use App\Models\Product;
 use App\Models\Listing;
-use App\Notifications\OrderStatusChanged;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderResource; // Importar el Resource
 
 class OrderController extends Controller
 {
@@ -235,15 +234,7 @@ class OrderController extends Controller
             'status' => ['required', Rule::in(['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled'])],
         ]);
 
-        $previousStatus = $order->status;
-        $newStatus = $validated['status'];
-
-        $order->update(['status' => $newStatus]);
-
-        // Enviar notificación al usuario si el estado cambió
-        if ($previousStatus !== $newStatus && $order->buyer) {
-            $order->buyer->notify(new OrderStatusChanged($order, $previousStatus, $newStatus));
-        }
+        $order->update(['status' => $validated['status']]);
 
         return new OrderResource($order->fresh('buyer'));
     }
@@ -347,5 +338,43 @@ class OrderController extends Controller
 
         $province = $address['province'] ?? '';
         return $provinceRates[$province] ?? 200000; // Default $2000
+    }
+
+    /**
+     * Agregar o actualizar tracking de envío (admin)
+     */
+    public function adminUpdateTracking(Request $request, Order $order)
+    {
+        $validated = $request->validate([
+            'tracking_number' => 'required|string|max:100',
+            'tracking_carrier' => 'nullable|string|max:50',
+            'tracking_url' => 'nullable|url|max:500',
+        ]);
+
+        $order->addTracking(
+            $validated['tracking_number'],
+            $validated['tracking_carrier'] ?? null,
+            $validated['tracking_url'] ?? null
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tracking actualizado correctamente',
+            'order' => new OrderResource($order->fresh('buyer')),
+        ]);
+    }
+
+    /**
+     * Marcar orden como entregada (admin)
+     */
+    public function adminMarkDelivered(Order $order)
+    {
+        $order->markAsDelivered();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Orden marcada como entregada',
+            'order' => new OrderResource($order->fresh('buyer')),
+        ]);
     }
 }

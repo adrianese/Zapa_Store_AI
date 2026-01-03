@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZStore - Flujo de Subasta</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e4e4e7;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #9ca3af;
+            font-size: 1.1rem;
+        }
+        
+        .diagram-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .diagram-section h2 {
+            color: #10b981;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mermaid {
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .info-card {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .info-card h3 {
+            color: #10b981;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .info-card ul {
+            list-style: none;
+        }
+        
+        .info-card li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .info-card li:last-child {
+            border-bottom: none;
+        }
+        
+        .badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        
+        .funds-box {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            margin-top: 1rem;
+        }
+        
+        .funds-box .title {
+            color: #f59e0b;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .funds-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+        }
+        
+        .funds-row:last-child {
+            border-bottom: none;
+        }
+        
+        .percent {
+            color: #10b981;
+        }
+        
+        .amount {
+            color: #60a5fa;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #6b7280;
+        }
+        
+        .export-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: transform 0.2s;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .export-btn {
+                display: none;
+            }
+            .diagram-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔨 ZStore - Sistema de Subastas Web3</h1>
+            <p class="subtitle">Flujo completo con penalización 1%, patrón withdraw y sistema anti micro-pujas</p>
+        </header>
+
+        <!-- Diagrama Principal -->
+        <section class="diagram-section">
+            <h2>📊 Flujo Principal de Subasta</h2>
+            <div class="mermaid">
+flowchart TD
+    A[🚀 Admin crea subasta] --> B{Subasta activa?}
+    B -->|Sí| C[👤 Usuario envía puja]
+    B -->|No/Expirada| K[⏰ Subasta finalizada]
+    
+    C --> D1[Calcular minBid]
+    D1 --> D2[MAX entre % y absoluto]
+    D2 --> D{msg.value >= minBid?}
+    D -->|No| E[❌ Bid too low]
+    D -->|Sí| F{Hay postor anterior?}
+    
+    F -->|No| G[✅ Primera puja registrada]
+    F -->|Sí| H[💰 Penalización 1%]
+    
+    H --> I[99% → pendingWithdrawals\n1% → feePool]
+    I --> G
+    
+    G --> J{Tiempo menor a 5 min?}
+    J -->|Sí| J1[⏱️ Anti-sniping: +5 min]
+    J -->|No| J2[Sin extensión]
+    J1 --> B
+    J2 --> B
+    
+    K --> L{Hubo pujas?}
+    L -->|No| M[🚫 Sin ganador]
+    L -->|Sí| N{currentBid >= reserve?}
+    
+    N -->|No| O[🚫 No alcanzó reserva]
+    N -->|Sí| P[🏆 Ganador confirmado]
+    
+    P --> Q[Winner llama claimPrize]
+    Q --> R[💵 Distribuir fondos]
+
+    style A fill:#10b981,color:#fff
+    style P fill:#f59e0b,color:#fff
+    style E fill:#ef4444,color:#fff
+    style M fill:#6b7280,color:#fff
+    style O fill:#6b7280,color:#fff
+            </div>
+        </section>
+
+        <!-- Withdraw Pattern -->
+        <section class="diagram-section">
+            <h2>🔐 Patrón de Retiro Seguro (Withdraw Pattern)</h2>
+            <div class="mermaid">
+flowchart LR
+    A[Postor superado] --> B[Saldo guardado en\npendingWithdrawals]
+    B --> C[Usuario llama\nwithdraw]
+    C --> D{Tiene saldo > 0?}
+    D -->|Sí| E[✅ Transferir ETH\nSaldo = 0]
+    D -->|No| F[❌ No funds]
+    
+    style A fill:#3b82f6,color:#fff
+    style E fill:#10b981,color:#fff
+    style F fill:#ef4444,color:#fff
+            </div>
+        </section>
+
+        <!-- Increase Bid -->
+        <section class="diagram-section">
+            <h2>⬆️ Incrementar Oferta Existente</h2>
+            <div class="mermaid">
+flowchart LR
+    A[Highest Bidder] --> B[Llama increaseBid\n+ ETH adicional]
+    B --> C{Es highest bidder?}
+    C -->|No| D[❌ Rechazado]
+    C -->|Sí| E[currentBid += msg.value\nSIN penalización]
+    E --> F{Anti-sniping?}
+    F -->|Sí| G[⏱️ Extender tiempo]
+    F -->|No| H[✅ Completado]
+    G --> H
+    
+    style A fill:#f59e0b,color:#fff
+    style D fill:#ef4444,color:#fff
+    style H fill:#10b981,color:#fff
+            </div>
+        </section>
+
+        <!-- Anti Micro-Pujas -->
+        <section class="diagram-section">
+            <h2>🛡️ Sistema Anti Micro-Pujas</h2>
+            <div class="mermaid">
+flowchart TD
+    A[Nueva Puja Recibida] --> B[Obtener currentBid]
+    B --> C{Primera puja?}
+    C -->|Sí| D[minBid = startingPrice]
+    C -->|No| E[Calcular incrementos]
+    
+    E --> F[% = currentBid × pct / 100]
+    E --> G[abs = minAbsoluteBidIncrement]
+    
+    F --> H{¿Subasta tiene\ncustom config?}
+    G --> H
+    
+    H -->|Sí| I[Usar valores de subasta]
+    H -->|No| J[Usar valores globales]
+    
+    I --> K[increment = MAX pct, abs]
+    J --> K
+    
+    K --> L[minBid = currentBid + increment]
+    D --> M{msg.value >= minBid?}
+    L --> M
+    
+    M -->|No| N[❌ Bid too low]
+    M -->|Sí| O[✅ Puja aceptada]
+    
+    style A fill:#3b82f6,color:#fff
+    style N fill:#ef4444,color:#fff
+    style O fill:#10b981,color:#fff
+    style K fill:#f59e0b,color:#fff
+            </div>
+            
+            <div class="funds-box" style="margin-top: 1.5rem;">
+                <div class="title">EJEMPLO: Bid actual = 1 ETH</div>
+                <div class="funds-row">
+                    <span>Incremento porcentual (5%):</span>
+                    <span><span class="amount">0.05 ETH</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>Incremento absoluto (~$20):</span>
+                    <span><span class="amount">0.005 ETH</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>Se usa el MAYOR:</span>
+                    <span><span class="percent">MAX(0.05, 0.005)</span> = <span class="amount">0.05 ETH</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>Mínimo requerido:</span>
+                    <span><span class="amount">1.05 ETH</span></span>
+                </div>
+            </div>
+            
+            <div class="funds-box" style="margin-top: 1rem;">
+                <div class="title">EJEMPLO: Bid actual = 0.1 ETH (artículo barato)</div>
+                <div class="funds-row">
+                    <span>Incremento porcentual (5%):</span>
+                    <span><span class="amount">0.005 ETH</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>Incremento absoluto (~$20):</span>
+                    <span><span class="amount">0.005 ETH</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>Se usa el MAYOR:</span>
+                    <span><span class="percent">MAX(0.005, 0.005)</span> = <span class="amount">0.005 ETH</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>Mínimo requerido:</span>
+                    <span><span class="amount">0.105 ETH</span></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Cards -->
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>📋 Estados de Subasta</h3>
+                <ul>
+                    <li><span>Created</span> <span class="badge">Inicial</span></li>
+                    <li><span>Active</span> <span class="badge">En curso</span></li>
+                    <li><span>Ended</span> <span class="badge">Finalizada</span></li>
+                    <li><span>Claimed</span> <span class="badge">Reclamada</span></li>
+                    <li><span>Cancelled</span> <span class="badge">Cancelada</span></li>
+                    <li><span>Failed</span> <span class="badge">Fallida</span></li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🔐 Seguridad</h3>
+                <ul>
+                    <li><span>ReentrancyGuard</span> <span class="badge">OpenZeppelin</span></li>
+                    <li><span>Withdraw Pattern</span> <span class="badge">Pull > Push</span></li>
+                    <li><span>Ownable</span> <span class="badge">Admin only</span></li>
+                    <li><span>Validaciones</span> <span class="badge">require()</span></li>
+                    <li><span>Anti-Sniping</span> <span class="badge">5 min</span></li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>⚙️ Configuración Default</h3>
+                <ul>
+                    <li><span>Platform Fee</span> <span class="badge">5%</span></li>
+                    <li><span>Outbid Penalty</span> <span class="badge">1%</span></li>
+                    <li><span>Min Increment %</span> <span class="badge">5%</span></li>
+                    <li><span>Min Increment Abs</span> <span class="badge">0.005 ETH</span></li>
+                    <li><span>Anti-Sniping</span> <span class="badge">5 min</span></li>
+                </ul>
+            </div>
+            
+            <div class="info-card">
+                <h3>🛡️ Anti Micro-Pujas</h3>
+                <ul>
+                    <li><span>Incremento %</span> <span class="badge">5% del bid</span></li>
+                    <li><span>Incremento Abs</span> <span class="badge">~$20 USD</span></li>
+                    <li><span>Lógica</span> <span class="badge">MAX(%, abs)</span></li>
+                    <li><span>Por Subasta</span> <span class="badge">Configurable</span></li>
+                    <li><span>Global</span> <span class="badge">Admin setter</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Distribución de Fondos -->
+        <section class="diagram-section">
+            <h2>💰 Distribución de Fondos</h2>
+            
+            <div class="funds-box">
+                <div class="title">CUANDO UN POSTOR ES SUPERADO (1 ETH de ejemplo)</div>
+                <div class="funds-row">
+                    <span>Postor superado recibe:</span>
+                    <span><span class="percent">99%</span> = <span class="amount">0.99 ETH</span> → pendingWithdrawals</span>
+                </div>
+                <div class="funds-row">
+                    <span>Fee Pool (retención):</span>
+                    <span><span class="percent">1%</span> = <span class="amount">0.01 ETH</span> → feePool</span>
+                </div>
+            </div>
+            
+            <div class="funds-box" style="margin-top: 1rem;">
+                <div class="title">CUANDO LA SUBASTA FINALIZA (10 ETH de ejemplo)</div>
+                <div class="funds-row">
+                    <span>Vendedor recibe:</span>
+                    <span><span class="percent">95%</span> = <span class="amount">9.5 ETH</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>Platform Fee:</span>
+                    <span><span class="percent">5%</span> = <span class="amount">0.5 ETH</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>Fee Pool acumulado:</span>
+                    <span><span class="amount">withdrawFeePool()</span> → Admin</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Crear Subasta con Config Custom -->
+        <section class="diagram-section">
+            <h2>⚙️ Crear Subasta con Configuración Personalizada</h2>
+            <div class="mermaid">
+flowchart LR
+    subgraph createAuction
+        A[externalId] --> Z[Subasta]
+        B[startingPrice] --> Z
+        C[reservePrice] --> Z
+        D[duration] --> Z
+        E[depositRequired] --> Z
+        F[startImmediately] --> Z
+        G[customMinBidIncrement] --> Z
+        H[customMinBidIncrementPct] --> Z
+    end
+    
+    Z --> I{Custom values = 0?}
+    I -->|Sí| J[Usar globals]
+    I -->|No| K[Usar custom]
+    
+    style G fill:#f59e0b,color:#fff
+    style H fill:#f59e0b,color:#fff
+            </div>
+            
+            <div class="funds-box" style="margin-top: 1.5rem;">
+                <div class="title">FUNCIONES DISPONIBLES</div>
+                <div class="funds-row">
+                    <span>createAuction(..., customAbs, customPct)</span>
+                    <span><span class="badge">8 params</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>createAuctionSimple(...)</span>
+                    <span><span class="badge">6 params - usa globals</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>getMinBidAmount(auctionId)</span>
+                    <span><span class="badge">Obtener mínimo actual</span></span>
+                </div>
+                <div class="funds-row">
+                    <span>getMinBidInfo(auctionId)</span>
+                    <span><span class="badge">Info detallada</span></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ejemplo Práctico -->
+        <section class="diagram-section">
+            <h2>🎯 Ejemplo: Subasta Nike Air Max Talle 42</h2>
+            <div class="mermaid">
+sequenceDiagram
+    participant Admin
+    participant Alice
+    participant Bob
+    participant Charlie
+    participant Contract
+    
+    Admin->>Contract: createAuction(0.5 ETH base, 1 ETH reserve, 24h)
+    Note over Contract: Estado: Active
+    
+    Alice->>Contract: placeBid(0.6 ETH)
+    Note over Contract: highestBidder = Alice
+    
+    Bob->>Contract: placeBid(1.0 ETH)
+    Contract-->>Alice: 0.594 ETH → pendingWithdrawals (99%)
+    Note over Contract: feePool += 0.006 ETH
+    Note over Contract: highestBidder = Bob
+    
+    Charlie->>Contract: placeBid(1.2 ETH) [último minuto]
+    Contract-->>Bob: 0.99 ETH → pendingWithdrawals
+    Note over Contract: feePool += 0.01 ETH
+    Note over Contract: ⏱️ +5 min anti-sniping
+    
+    Note over Contract: ⏰ Tiempo finalizado
+    
+    Charlie->>Contract: claimPrize()
+    Contract-->>Admin: 0.06 ETH (5% fee)
+    Contract-->>Admin: Seller recibe 1.14 ETH
+    
+    Alice->>Contract: withdraw()
+    Contract-->>Alice: 0.594 ETH
+    
+    Bob->>Contract: withdraw()
+    Contract-->>Bob: 0.99 ETH
+    
+    Admin->>Contract: withdrawFeePool()
+    Contract-->>Admin: 0.016 ETH
+            </div>
+        </section>
+
+        <footer>
+            <p>ZStore - Sistema de Subastas Descentralizado</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">Solidity 0.8.20 + OpenZeppelin + Hardhat</p>
+        </footer>
+    </div>
+
+    <button class="export-btn" onclick="window.print()">📄 Exportar PDF</button>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            sequence: {
+                useMaxWidth: true,
+                showSequenceNumbers: true
+            }
+        });
+    </script>
+</body>
+</html>

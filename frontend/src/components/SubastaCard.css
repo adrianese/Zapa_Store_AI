@@ -1,0 +1,138 @@
+/* Modern card styles for SubastaCard */
+.subasta-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.10);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s;
+  position: relative;
+  min-width: 320px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.subasta-card.ending-soon {
+  border: 2px solid #f59e0b;
+  box-shadow: 0 4px 24px 0 rgba(245,158,11,0.15);
+}
+
+.subasta-card.finished {
+  opacity: 0.7;
+  filter: grayscale(0.2);
+}
+
+.card-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1.5/1;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.card-image-wrapper img {
+  max-width: 90%;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 0.8rem;
+  background: #fff;
+}
+
+.ending-badge, .finished-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: #f59e0b;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.3rem 0.8rem;
+  border-radius: 1rem;
+  font-size: 0.95rem;
+  z-index: 2;
+}
+.finished-badge {
+  background: #6b7280;
+}
+
+.card-content {
+  padding: 1.2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.product-brand {
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.product-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0.1rem 0 0.2rem 0;
+  color: #22223b;
+}
+
+.card-bid-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.bid-label {
+  color: #6b7280;
+  font-size: 0.98rem;
+}
+
+.bid-value {
+  color: #10b981;
+  font-weight: bold;
+  font-size: 1.15rem;
+}
+
+.card-countdown {
+  font-size: 1.1rem;
+  font-family: 'JetBrains Mono', monospace;
+  color: #f59e0b;
+  margin-bottom: 0.2rem;
+}
+
+.countdown-finished {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.btn-ver-subasta {
+  margin-top: 0.7rem;
+  background: linear-gradient(90deg, #10b981 60%, #f59e0b 100%);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.08rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px 0 rgba(16,185,129,0.10);
+}
+
+.btn-ver-subasta:hover {
+  background: linear-gradient(90deg, #059669 60%, #f59e0b 100%);
+  box-shadow: 0 4px 16px 0 rgba(16,185,129,0.18);
+}
+
+@media (max-width: 600px) {
+  .subasta-card {
+    min-width: 90vw;
+    max-width: 98vw;
+  }
+  .card-content {
+    padding: 1rem 0.7rem 1.2rem 0.7rem;
+  }
+}

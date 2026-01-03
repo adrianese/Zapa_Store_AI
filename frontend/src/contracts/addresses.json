@@ -1,0 +1,21 @@
+{
+  "_comment": "Actualizado automáticamente por el script de deploy",
+  "_lastUpdate": null,
+  "networks": {
+    "localhost": {
+      "chainId": 31337,
+      "Auction": "",
+      "Marketplace": ""
+    },
+    "sepolia": {
+      "chainId": 11155111,
+      "Auction": "",
+      "Marketplace": ""
+    },
+    "mainnet": {
+      "chainId": 1,
+      "Auction": "",
+      "Marketplace": ""
+    }
+  }
+}

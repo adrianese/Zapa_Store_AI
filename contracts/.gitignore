@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+cache/
+artifacts/
+typechain-types/
+
+# Environment variables
+.env
+
+# Deployment files (keep template)
+deployments/*
+!deployments/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+
+# Coverage
+coverage/
+coverage.json
+
+# Misc
+*.log
+.DS_Store
