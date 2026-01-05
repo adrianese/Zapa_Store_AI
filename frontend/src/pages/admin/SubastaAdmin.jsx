@@ -3,6 +3,37 @@ import Swal from "sweetalert2";
 import { api } from "../../api/client";
 import "./AdminCommon.css";
 
+// Componente de reloj minimalista para hora local
+const LocalClock = () => {
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const pad = (n) => String(n).padStart(2, "0");
+  const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+  return (
+    <div style={{
+      fontFamily: 'monospace',
+      fontSize: '2.7rem',
+      color: '#666',
+      background: 'transparent',
+      padding: '0.2rem 0.5rem',
+      display: 'inline-block',
+      minWidth: '240px',
+      textAlign: 'center',
+      border: '1px solid #e0e0e0',
+      borderRadius: '4px',
+      marginLeft: 'auto'
+    }}>
+      {time}
+    </div>
+  );
+};
+
 const SubastaAdmin = ({ onBack }) => {
   const [products, setProducts] = useState([]);
   const [auctions, setAuctions] = useState([]);
@@ -356,6 +387,21 @@ const SubastaAdmin = ({ onBack }) => {
     }
   };
 
+  const setEndTime = (hour, minute = 0) => {
+    if (!auctionData.start_at) {
+      Swal.fire("Error", "Primero selecciona la fecha de inicio", "error");
+      return;
+    }
+    const startDate = new Date(auctionData.start_at);
+    const endDate = new Date(startDate);
+    endDate.setHours(hour, minute, 0, 0);
+    // Si la hora es anterior a la de inicio, sumar un día
+    if (endDate <= startDate) {
+      endDate.setDate(endDate.getDate() + 1);
+    }
+    setAuctionData({ ...auctionData, end_at: endDate.toISOString().slice(0, 16) });
+  };
+
   const getStatusBadge = (status) => {
     const badges = {
       pending: { emoji: "🟡", text: "Pendiente", class: "badge-warning" },
@@ -394,8 +440,13 @@ const SubastaAdmin = ({ onBack }) => {
 
   return (
     <div className="admin-section">
-      <button className="boton-atras" onClick={onBack}>← Volver al Panel</button>
-      <h2>🔨 Gestión de Subastas</h2>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+        <div>
+          <button className="boton-atras" onClick={onBack}>← Volver al Panel</button>
+          <h2>🔨 Gestión de Subastas</h2>
+        </div>
+        <LocalClock />
+      </div>
       
       {/* Tabs */}
       <div className="admin-tabs">
@@ -499,6 +550,14 @@ const SubastaAdmin = ({ onBack }) => {
                   onChange={(e) => setAuctionData({ ...auctionData, end_at: e.target.value })}
                   required
                 />
+                <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
+                  <button type="button" className="boton-verde" onClick={() => setEndTime(23, 59)} style={{ fontSize: '0.8rem', padding: '0.2rem 0.5rem' }}>
+                    23:59
+                  </button>
+                  <button type="button" className="boton-verde" onClick={() => setEndTime(23, 0)} style={{ fontSize: '0.8rem', padding: '0.2rem 0.5rem' }}>
+                    23:00
+                  </button>
+                </div>
               </div>
             </div>
 

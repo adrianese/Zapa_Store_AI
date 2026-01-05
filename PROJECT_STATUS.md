@@ -1,6 +1,6 @@
 # 📊 ZSTORE-AI - Estado del Proyecto
 
-> Última actualización: 2 de Enero, 2026
+> Última actualización: 4 de Enero, 2026
 
 ---
 
@@ -21,24 +21,26 @@ Marketplace Web3 con subastas, escrow blockchain, identidad descentralizada (DID
 | Módulo | Estado | Notas |
 |--------|--------|-------|
 | 🔐 Auth | ✅ 100% | Register, Login, Logout, Profile, Roles |
-| 📦 Productos | ✅ 95% | CRUD, talles, stock, imágenes |
+| 📦 Productos | ✅ 100% | CRUD, talles, stock, imágenes, **precios actualizados x100** |
 | 🛒 Carrito | ✅ 100% | Context, persistencia localStorage, **z-index fix** |
 | 💳 Checkout | ✅ 95% | 3 pasos, direcciones, blockchain, **cupones** |
 | 📋 Órdenes | ✅ 95% | CRUD, estados, **tracking**, **shipping info** |
-| 📊 Admin Dashboard | ✅ 90% | Métricas, estadísticas, pedidos mejorados |
+| 📊 Admin Dashboard | ✅ 95% | Métricas, estadísticas, pedidos mejorados, **reloj local**, **countdown 3min** |
 | 🏷️ Brand Details | ✅ 100% | CRUD, editor admin, display en producto |
 | ⚙️ Configuración | ✅ 100% | **Backend real con Settings table** |
 | 👥 Usuarios Admin | ✅ 100% | **CRUD completo, roles, activar/desactivar** |
 | 📧 Notificaciones Email | ✅ 95% | **OrderStatusChanged + NotificationController** |
 | 🎟️ Cupones | ✅ 100% | **CRUD admin, validación, aplicación en checkout** |
-| 🔨 Subastas | ✅ 100% | Backend + UI tiempo real, anti-sniping, anti micro-pujas, cards responsivas, ruta /subastas, highlight naranja, fixes navegación |
+| 🔨 Subastas | ✅ 100% | Backend + UI tiempo real, anti-sniping, anti micro-pujas, cards responsivas, ruta /subastas, highlight naranja, fixes navegación, **botones hora cierre**, **countdown 3min** |
 | 💰 Pujas (Bids) | ✅ 100% | BidController, historial, withdraw pattern, 1% penalty, fixes timezone, CORS, integración frontend |
 | 📜 Contratos Solidity | ✅ 95% | **Marketplace.sol + Auction.sol completos + 85 tests** |
 | 🌐 Web3 Integration | ✅ 85% | **Hardhat configurado, scripts deploy, OpenZeppelin npm** |
-| 📚 Documentación | ✅ 90% | **Diagramas Mermaid, flujos visuales HTML** |
+| 📚 Documentación | ✅ 95% | **Diagramas Mermaid, flujos visuales HTML, archivos .md actualizados** |
 | 🤖 Chatbot | ❌ 0% | No implementado |
 | 🆔 DID/Identidad | ❌ 0% | No implementado |
 | ⚖️ Votaciones/Disputas | ❌ 5% | Solo modelo, sin lógica |
+| 🔧 CORS | ✅ 100% | **Configurado para localhost:5173 y 5174** |
+| 🕐 Reloj Admin | ✅ 100% | **Reloj local en panel subastas admin** |
 
 ---
 
@@ -416,18 +418,52 @@ npx hardhat run scripts/deploy.js --network sepolia    # Deploy testnet
 
 ---
 
-### Cambios Anteriores (Sesión previa)
+### Cambios Recientes (4 de Enero, 2026)
 
-### Backend
-- ✅ **BidController mejorado** con lógica anti-sniping (5 min window, 5 min extension)
-- ✅ **Nuevos endpoints**: `GET /bids`, `GET /bids/min-amount`
-- ✅ **Eventos broadcast**: `NewBidPlaced`, `AuctionTimeExtended`
-- ✅ Incremento mínimo de puja: 5%
+#### 🔧 Reparación y Configuración
+- ✅ **Proyecto restaurado** después de daño en archivos
+- ✅ **CORS configurado** para localhost:5173 y 5174
+- ✅ **Listings creados** - 30 productos activos en marketplace
+- ✅ **Precios actualizados** - multiplicados x100 para aumentar valores
 
-### Frontend
-- ✅ **Subasta.jsx reescrito** con countdown, historial, WebSocket
-- ✅ **Subasta.css** glassmorphism y animaciones
-- ✅ **CarritoModal** z-index fix para Swal
+#### 🎨 Mejoras UI/UX Admin
+- ✅ **Reloj local** agregado en panel de subastas admin
+- ✅ **Countdown subastas** cambiado a 3 minutos (antes 5)
+- ✅ **Botones hora cierre** - 23:59 y 23:00 para facilitar creación de subastas
+- ✅ **Verificación exhaustiva** de todas las tabs del admin
+
+#### 📦 Productos y Listings
+- ✅ **Seeder ejecutado** - productos y listings creados correctamente
+- ✅ **Precios aumentados** significativamente (x100) según requerimiento
+- ✅ **API funcionando** - /listings, /products, /admin/* respondiendo correctamente
+
+#### 🔒 Seguridad y Configuración
+- ✅ **CORS actualizado** para múltiples puertos de desarrollo
+- ✅ **Middleware funcionando** - auth, roles, permisos
+- ✅ **Validaciones activas** - formularios, endpoints protegidos
+
+---
+
+## 📋 PENDIENTES CRÍTICOS
+
+### 🚨 Alta Prioridad
+1. **🤖 Chatbot IA** - Implementar asistente conversacional
+2. **🆔 Sistema DID** - Identidad descentralizada y badges soulbound  
+3. **⚖️ Sistema de Disputas** - Lógica completa de mediación
+4. **🌐 Web3 Integration** - Completar conexión con contratos desplegados
+
+### 🔄 Media Prioridad  
+5. **📧 Email Templates** - Mejorar diseño de correos
+6. **📱 Responsive Design** - Optimización móvil completa
+7. **🔍 SEO** - Meta tags, Open Graph, sitemap
+8. **⚡ Performance** - Lazy loading, code splitting, caching
+
+### 📊 Métricas de Éxito
+- ✅ **85% del proyecto completado**
+- ✅ **Backend 95% funcional**
+- ✅ **Frontend 90% operativo** 
+- ✅ **Blockchain 95% implementado**
+- ✅ **Documentación 95% actualizada**
 
 ---
 

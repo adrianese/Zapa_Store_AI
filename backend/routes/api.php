@@ -204,5 +204,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/detalles', [DetallesController::class, 'store']);
     Route::put('/detalles/{marca}', [DetallesController::class, 'update']);
     Route::delete('/detalles/{marca}', [DetallesController::class, 'destroy']);
+
+    // Brand Details (admin)
+    Route::get('/brand-details/admin', [BrandDetailController::class, 'adminIndex']);
+    Route::get('/brand-details/without-details', [BrandDetailController::class, 'brandsWithoutDetails']);
+    Route::post('/brand-details', [BrandDetailController::class, 'store']);
+    Route::put('/brand-details/{brandDetail}', [BrandDetailController::class, 'update']);
+    Route::delete('/brand-details/{brandDetail}', [BrandDetailController::class, 'destroy']);
 });
+
+
 

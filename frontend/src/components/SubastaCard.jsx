@@ -133,7 +133,7 @@ const SubastaCard = ({ auction }) => {
         setIsEnding(false);
         return;
       }
-      setIsEnding(diff < 5 * 60 * 1000);
+      setIsEnding(diff < 3 * 60 * 1000);
       setTimeRemaining({
         days: Math.floor(diff / (1000 * 60 * 60 * 24)),
         hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),

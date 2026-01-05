@@ -31,8 +31,8 @@ const ListingPage = () => {
         const fetchBrandDetails = async () => {
             setLoadingDetalles(true);
             try {
-                const response = await api.get(`/brand-details/by-brand/${encodeURIComponent(listing.product.brand)}`);
-                setDetallesMarca(response.data);
+                const response = await api.get(`/detalles/${encodeURIComponent(listing.product.brand)}`);
+                setDetallesMarca(response.data.data);
             } catch (err) {
                 console.log('No se encontraron detalles para la marca:', listing.product.brand);
                 setDetallesMarca(null);

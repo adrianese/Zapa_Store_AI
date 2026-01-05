@@ -311,8 +311,7 @@ const PedidosAdmin = ({ onBack }) => {
                 <th>Producto</th>
                 <th>Talle</th>
                 <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Subtotal</th>
+                <th>Precio Unitario</th>
               </tr>
             </thead>
             <tbody>
@@ -327,7 +326,6 @@ const PedidosAdmin = ({ onBack }) => {
                   <td>{item.size || "—"}</td>
                   <td>{item.quantity}</td>
                   <td>${(item.price_minor / 100).toLocaleString("es-AR")}</td>
-                  <td>${((item.price_minor * item.quantity) / 100).toLocaleString("es-AR")}</td>
                 </tr>
               ))}
             </tbody>

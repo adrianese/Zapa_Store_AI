@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Models\BrandDetail;
 
 class DetallesController
 {
@@ -14,21 +15,13 @@ class DetallesController
     public function index()
     {
         try {
-            $detallesPath = public_path('detalles.json');
-
-            if (!file_exists($detallesPath)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Archivo de detalles no encontrado'
-                ], 404);
-            }
-
-            $contenido = file_get_contents($detallesPath);
-            $detalles = json_decode($contenido, true);
+            $brandDetails = BrandDetail::active()->orderBy('marca')->get();
 
             return response()->json([
                 'success' => true,
-                'data' => $detalles
+                'data' => [
+                    'productos_deportivos' => $brandDetails
+                ]
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -45,29 +38,9 @@ class DetallesController
     public function show($marca)
     {
         try {
-            $detallesPath = public_path('detalles.json');
+            $brandDetail = BrandDetail::byBrand($marca)->first();
 
-            if (!file_exists($detallesPath)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Archivo de detalles no encontrado'
-                ], 404);
-            }
-
-            $contenido = file_get_contents($detallesPath);
-            $detalles = json_decode($contenido, true);
-
-            $marcaDetalle = null;
-            if (isset($detalles['productos_deportivos'])) {
-                foreach ($detalles['productos_deportivos'] as $detalle) {
-                    if (strtolower($detalle['marca']) === strtolower($marca)) {
-                        $marcaDetalle = $detalle;
-                        break;
-                    }
-                }
-            }
-
-            if (!$marcaDetalle) {
+            if (!$brandDetail) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Detalles de la marca no encontrados'
@@ -76,7 +49,7 @@ class DetallesController
 
             return response()->json([
                 'success' => true,
-                'data' => $marcaDetalle
+                'data' => $brandDetail
             ]);
         } catch (\Exception $e) {
             return response()->json([

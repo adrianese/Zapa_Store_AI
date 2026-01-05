@@ -12,7 +12,7 @@ const CarritoModal = ({
 }) => {
   const [visible, setVisible] = useState(false);
   const total = carrito.reduce(
-    (acc, item) => acc + (item.price_minor / 100) * item.cantidad,
+    (acc, item) => acc + (item.price_minor ? item.price_minor / 100 : item.precio) * item.cantidad,
     0
   );
 
@@ -23,7 +23,7 @@ const CarritoModal = ({
   const agregarItem = async (item) => {
     const result = await Swal.fire({
       title: '¿Agregar más unidades?',
-      text: `${item.brand} ${item.model}`,
+      text: `${item.brand || item.marca} ${item.model || item.nombre}`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#71b100',
@@ -134,16 +134,14 @@ const CarritoModal = ({
           <>
             <ul className="lista-carrito">
               {carrito.map((item, i) => {
-                const imgSrc = (item.images && item.images[0]) 
-                  ? item.images[0] 
-                  : "/imagenes/default.png";
+                const imgSrc = item.imagen || (item.images && item.images[0]) || "/imagenes/default.png";
                 return (
                   <li key={`${item.id}-${item.talle}`} className="item-carrito">
                     <img
                       src={imgSrc}
-                      alt={item.brand}
+                      alt={item.brand || item.marca}
                       className="miniatura-carrito"
-                      title={`Modelo: ${item.model}`}
+                      title={`Modelo: ${item.model || item.nombre}`}
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = "/imagenes/default.png";
@@ -151,14 +149,13 @@ const CarritoModal = ({
                     />
                     <div className="detalle-carrito-linea">
                       <span className="marca-modelo">
-                        <strong>{i + 1}.</strong> {item.brand} {item.model}
+                        <strong>{i + 1}.</strong> {item.brand || item.marca} {item.model || item.nombre} {item.talle ? `(Talle ${item.talle})` : ''}
                       </span>
                       <span className="precio-item">
-                        ${(item.price_minor / 100).toLocaleString("es-AR")}
+                        ${(item.price_minor ? item.price_minor / 100 : item.precio).toLocaleString("es-AR")}
                       </span>
-                      <span className="talle-item">Talle: {item.talle}</span>
                       <span className="cantidad-item">
-                        Cantidad: {item.cantidad}
+                        x{item.cantidad}
                       </span>
 
                       <div className="acciones-item">

@@ -114,7 +114,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 2rem;
+  font-size: 4rem;
   padding: 0.5rem;
   transition: transform 0.2s ease;
 }
@@ -2865,4 +2865,120 @@
     position: relative;
     padding-right: 2.5rem;
   }
+}
+
+/* Order Detail Styles */
+.order-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.order-detail-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+.order-detail-card h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #71b100;
+  padding-bottom: 0.5rem;
+}
+
+.order-detail-card p {
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.detail-content {
+  margin-top: 1rem;
+}
+
+.shipping-address-display p {
+  font-size: 1.4rem;
+  margin-bottom: 0.3rem;
+}
+
+.instructions {
+  font-style: italic;
+  color: #666;
+}
+
+.order-items-section {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.order-items-section h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #71b100;
+  padding-bottom: 0.5rem;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.items-table th {
+  background: #71b100;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.items-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 1.2rem;
+}
+
+.product-cell .product-name {
+  font-weight: 600;
+  display: block;
+  font-size: 1.3rem;
+}
+
+.product-cell .product-brand {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.order-totals {
+  border-top: 2px solid var(--border-color);
+  padding-top: 1rem;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 1.4rem;
+}
+
+.total-row.total-final {
+  font-weight: 700;
+  font-size: 1.6rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: 0.5rem;
+  padding-top: 1rem;
 }

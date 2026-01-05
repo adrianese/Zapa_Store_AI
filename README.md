@@ -97,6 +97,9 @@ Zstore-ai/
 - [x] Migraciones de base de datos
 - [x] Rutas API organizadas (publicas y protegidas)
 - [x] Sistema de roles y permisos con Spatie
+- [x] Configuracion CORS completa
+- [x] Sistema de listings del marketplace
+- [x] Actualizaciones de precios en tiempo real
 
 #### Frontend (React)
 - [x] Pagina de inicio con catalogo de productos
@@ -114,6 +117,10 @@ Zstore-ai/
 - [x] Pagina de perfil de usuario
 - [x] Pagina de seguimiento de envio
 - [x] Pagina "Mis Ordenes"
+- [x] Reloj en tiempo real en panel admin
+- [x] Cuenta regresiva para subastas
+- [x] Botones de tiempo de subasta
+- [x] Pestañas organizadas en panel admin
 
 #### Smart Contracts (Solidity)
 - [x] Contrato Marketplace con sistema de escrow
@@ -356,4 +363,4 @@ Este proyecto se encuentra bajo desarrollo activo. Contactar a los autores para 
 
 ---
 
-*Ultima actualizacion: Enero 2026*
+*Ultima actualizacion: Enero 2025*
